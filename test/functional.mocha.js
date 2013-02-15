@@ -5,18 +5,7 @@ describe('statem', function () {
 
   describe('two states, one transition', function () {
 
-    describe('with state definition', function () {
-
-      beforeEach(function () {
-        this.definition = {
-          initial: 'A'
-        , states: {
-            A: { poke: 'B' }
-          , B: { poke: 'A' }
-          }
-        };
-        this.machine = statem.machine(this.definition);
-      });
+    function checkit () {
 
       it('begins in state A', function () {
         assert.strictEqual(this.machine.state(), 'A');
@@ -45,6 +34,38 @@ describe('statem', function () {
         });
 
       });
+    }
+
+    describe('with state definition', function () {
+
+      beforeEach(function () {
+        this.definition = {
+          initial: 'A'
+        , states: {
+            A: { poke: 'B' }
+          , B: { poke: 'A' }
+          }
+        };
+        this.machine = statem.machine(this.definition);
+      });
+
+      checkit();
+
+    });
+
+    describe('with event definition', function () {
+
+      beforeEach(function () {
+        this.definition = {
+          initial: 'A'
+        , events: {
+            poke: { A: 'B', B: 'A' }
+          }
+        };
+        this.machine = statem.machine(this.definition);
+      });
+
+      checkit();
 
     });
 
