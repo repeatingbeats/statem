@@ -10,7 +10,7 @@ lint:
 watch:
 	$(GRUNT) watch
 
-test:
+test: lint
 	NODE_ENV=test $(MOCHA) --grep "$(GREP)" $(TESTS)
 
 test-debug:
