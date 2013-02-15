@@ -1,4 +1,4 @@
-1.0.0 / 2013-02-14
+1.0.0 / 2013-02-??
 ==================
 
- * Initial release
+ * Initial release (not yet out the door)
