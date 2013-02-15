@@ -10,10 +10,7 @@ describe('statem', function () {
       beforeEach(function () {
         var self = this;
 
-        this.observerCount = {
-          A: { Enter: 0, Exit: 0 }
-        , B: { Enter: 0, Exit: 0 }
-        };
+        this.observerCount = { A: {}, B: {} };
 
         [ 'A', 'B' ].forEach(function (state) {
           [ 'Enter', 'Exit' ].forEach(function (hook) {
