@@ -1,0 +1,20 @@
+{
+  "bitwise": true
+, "curly": false
+, "eqeqeq": true
+, "forin": false
+, "immed": true
+, "latedef": true
+, "newcap": true
+, "noarg": true
+, "noempty": true
+, "nonew": true
+, "plusplus": false
+, "regexp": false
+, "undef": false
+, "strict": false
+, "trailing": true
+, "expr": true
+, "laxcomma": true
+, "es5": true
+}

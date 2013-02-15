@@ -1,0 +1,28 @@
+{
+  "name": "statem"
+, "version": "1.0.0"
+, "author": "Steve Lloyd <steve@repeatingbeats.com>"
+, "description": "Simple state machine built on event emitters"
+, "main": "./lib/statem"
+, "keywords": [ "state machine", "fsm" ]
+, "homepage": "https://github.com/repeatingbeats/statem"
+, "repository": {
+    "type": "git"
+  , "url": "https://github.com/repeatingbeats/statem"
+  }
+, "bugs": {
+    "url": "http://github.com/repeatingbeats/statem/issues"
+  }
+, "licenses": [{
+    "type": "MIT"
+  , "url": "https://github.com/repeatingbeats/statem/raw/master/LICENSE"
+  }]
+, "devDependencies": {
+    "mocha": "1.8.x"
+  , "chai": "1.5.x"
+  , "grunt": "0.3.x"
+  }
+, "scripts": {
+    "test": "make test"
+  }
+}
