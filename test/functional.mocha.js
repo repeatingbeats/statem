@@ -1,7 +1,7 @@
 var assert = require('chai').assert
   , statem = require('./../lib/statem');
 
-describe('statem', function () {
+describe('[functional] statem', function () {
 
   describe('two states, one event', function () {
 
