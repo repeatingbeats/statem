@@ -4,6 +4,8 @@
 
 __statem__ is a simple JavaScript state machine for Node.js build on top of event emitters. It is currently under development; use at your own risk. The intent is to publish a stable, supported 1.0 version to npm when ready.
 
+[Read about why I wrote this.](http://www.repeatingbeats.com/writings/2013/02/18/a-state-of-refactoring/)
+
 ## Supported Environments
 
 Statem is built for Node and has a dependency on Node's [EventEmitter class](http://nodejs.org/api/events.html#events_class_events_eventemitter). At this time, no attempt is made to support browser environments.
