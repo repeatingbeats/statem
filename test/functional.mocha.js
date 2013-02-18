@@ -1,11 +1,30 @@
 var assert = require('chai').assert
   , statem = require('./../lib/statem');
 
-describe('statem', function () {
+describe('[functional] statem', function () {
 
   describe('two states, one event', function () {
 
     function checkit () {
+
+      beforeEach(function () {
+        var self = this;
+
+        this.observerCount = { A: {}, B: {} };
+
+        [ 'A', 'B' ].forEach(function (state) {
+          [ 'Enter', 'Exit' ].forEach(function (hook) {
+
+            var method = 'on' + hook;
+
+            self.observerCount[state][method] = 0;
+            self.machine[method](state, function () {
+              self.observerCount[state][method]++;
+            });
+
+          });
+        });
+      });
 
       it('begins in state A', function () {
         assert.strictEqual(this.machine.state(), 'A');
@@ -21,6 +40,14 @@ describe('statem', function () {
           assert.strictEqual(this.machine.state(), 'B');
         });
 
+        it('notifies A exit observers', function () {
+          assert.strictEqual(this.observerCount.A.onExit, 1);
+        });
+
+        it('notifies B entry observers', function () {
+          assert.strictEqual(this.observerCount.B.onEnter, 1);
+        });
+
         describe('on a second poke', function () {
 
           beforeEach(function () {
@@ -31,9 +58,18 @@ describe('statem', function () {
             assert.strictEqual(this.machine.state(), 'A');
           });
 
+          it('notifies B exit observers', function () {
+            assert.strictEqual(this.observerCount.B.onExit, 1);
+          });
+
+          it('notifies A entry observers', function () {
+            assert.strictEqual(this.observerCount.A.onEnter, 1);
+          });
+
         });
 
       });
+
     }
 
     describe('with state definition', function () {
