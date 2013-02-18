@@ -64,7 +64,7 @@ machine = statem.machine({
 });
 ```
 
-### Observing State Signalling Events
+### Observing State and Signalling Events
 
 Machine state can be observed with the `state` method. Events are signalled via `send`.
 
