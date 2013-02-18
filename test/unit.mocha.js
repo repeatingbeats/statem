@@ -136,6 +136,13 @@ describe('[unit] statem', function () {
             assert.strictEqual(this.observers['enter:B'].callCount, 1);
           });
 
+          it('invokes exit observers before entry observers', function () {
+            sinon.assert.callOrder(
+              this.observers['exit:A']
+            , this.observers['enter:B']
+            );
+          });
+
         });
 
         describe('on prod', function () {
@@ -188,6 +195,13 @@ describe('[unit] statem', function () {
             assert.strictEqual(this.observers['enter:C'].callCount, 1);
           });
 
+          it('invokes exit observers before entry observers', function () {
+            sinon.assert.callOrder(
+              this.observers['exit:B']
+            , this.observers['enter:C']
+            );
+          });
+
         });
 
         describe('on prod', function () {
@@ -206,6 +220,13 @@ describe('[unit] statem', function () {
 
           it('invokes the enter A observer', function () {
             assert.strictEqual(this.observers['enter:A'].callCount, 1);
+          });
+
+          it('invokes exit observers before entry observers', function () {
+            sinon.assert.callOrder(
+              this.observers['exit:B']
+            , this.observers['enter:A']
+            );
           });
 
         });
@@ -258,6 +279,13 @@ describe('[unit] statem', function () {
 
           it('invokes the enter B observer', function () {
             assert.strictEqual(this.observers['enter:B'].callCount, 1);
+          });
+
+          it('invokes exit observers before entry observers', function () {
+            sinon.assert.callOrder(
+              this.observers['exit:C']
+            , this.observers['enter:B']
+            );
           });
 
         });
