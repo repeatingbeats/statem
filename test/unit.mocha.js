@@ -10,13 +10,14 @@ describe('[unit] statem', function () {
     this.states = {
       A: { poke: 'B', prod: 'A' }
     , B: { poke: 'C', prod: 'A' }
-    , C: { poke: 'C', prod: 'B' }
+    , C: { poke: 'C', prod: 'B', invalid: 'C' }
     };
 
     // Equivalent event definition
     this.events = {
       poke: { A: 'B', B: 'C', C: 'C' }
     , prod: { A: 'A', B: 'A', C: 'B' }
+    , invalid: { C: 'C' }
     };
 
     this.spyEmitter = new coreEvents.EventEmitter();
@@ -314,13 +315,13 @@ describe('[unit] statem', function () {
         it('does not change machine state', function () {
           var threw = false;
 
-          this.machine._state = 'ready';
+          this.machine._state = 'A';
 
           try {
             this.machine.send(this.event);
           }
           catch (e) {
-            assert.equal(this.machine.state(), 'ready');
+            assert.equal(this.machine.state(), 'A');
             threw = true;
           }
 
@@ -334,7 +335,7 @@ describe('[unit] statem', function () {
         beforeEach(function () {
           this.event = 'test-event-unknown';
           this.regex = new RegExp(
-            'unknown event.*\'' + this.unknown + '\''
+            'unknown event.*\'' + this.event + '\''
           , 'i'
           );
         });
@@ -346,13 +347,13 @@ describe('[unit] statem', function () {
       describe('for known events in non-accepting states', function() {
 
         beforeEach(function () {
-          // The 'ready' state does not accept 'done'
-          this.event = 'done';
+          // The 'A' state does not accept 'invalid'
+          this.event = 'invalid';
           this.regex = new RegExp(
             [
               'machine does not accept'
-            , '\'done\''
-            , 'in \'ready\' state'
+            , '\'invalid\''
+            , 'in \'A\' state'
             ].join('.*')
           , 'i'
           );
