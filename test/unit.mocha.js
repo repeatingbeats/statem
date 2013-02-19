@@ -25,7 +25,7 @@ describe('[unit] statem', function () {
     sinon.spy(this.spyEmitter, 'emit');
 
     this.testState = 'testState';
-    this.testEvent = 'testEvent';
+    this.testEvent = 'poke';
 
     sinon.stub(coreEvents, 'EventEmitter').returns(this.spyEmitter);
   });
@@ -55,12 +55,12 @@ describe('[unit] statem', function () {
       describe('.send', function () {
 
         it('emits the event', function () {
+          var observer = sinon.stub();
+
+          this.spyEmitter.on(this.testEvent, observer);
           this.machine.send(this.testEvent);
 
-          assert.deepEqual(
-            this.spyEmitter.emit.lastCall.args
-          , [ this.testEvent ]
-          );
+          assert.strictEqual(observer.callCount, 1);
         });
 
       });
