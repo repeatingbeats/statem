@@ -10,13 +10,14 @@ describe('[unit] statem', function () {
     this.states = {
       A: { poke: 'B', prod: 'A' }
     , B: { poke: 'C', prod: 'A' }
-    , C: { poke: 'C', prod: 'B' }
+    , C: { poke: 'C', prod: 'B', invalid: 'C' }
     };
 
     // Equivalent event definition
     this.events = {
       poke: { A: 'B', B: 'C', C: 'C' }
     , prod: { A: 'A', B: 'A', C: 'B' }
+    , invalid: { C: 'C' }
     };
 
     this.spyEmitter = new coreEvents.EventEmitter();
@@ -24,7 +25,7 @@ describe('[unit] statem', function () {
     sinon.spy(this.spyEmitter, 'emit');
 
     this.testState = 'testState';
-    this.testEvent = 'testEvent';
+    this.testEvent = 'poke';
 
     sinon.stub(coreEvents, 'EventEmitter').returns(this.spyEmitter);
   });
@@ -54,12 +55,12 @@ describe('[unit] statem', function () {
       describe('.send', function () {
 
         it('emits the event', function () {
+          var observer = sinon.stub();
+
+          this.spyEmitter.on(this.testEvent, observer);
           this.machine.send(this.testEvent);
 
-          assert.deepEqual(
-            this.spyEmitter.emit.lastCall.args
-          , [ this.testEvent ]
-          );
+          assert.strictEqual(observer.callCount, 1);
         });
 
       });
@@ -289,6 +290,76 @@ describe('[unit] statem', function () {
           });
 
         });
+
+      });
+
+    });
+
+    describe('invalid transitions', function() {
+
+      function invalidAssertions() {
+
+        // Common test cases for invalid transitions. Expects the test context
+        // to have an `event` attribute containing the string event and a
+        // `regex` attribute containing an error matcher.
+
+        it('throws', function () {
+          assert.throws(
+            function () {
+              this.machine.send(this.event);
+            }.bind(this)
+          , this.regex
+          );
+        });
+
+        it('does not change machine state', function () {
+          var threw = false;
+
+          this.machine._state = 'A';
+
+          try {
+            this.machine.send(this.event);
+          }
+          catch (e) {
+            assert.equal(this.machine.state(), 'A');
+            threw = true;
+          }
+
+          // safeguard to ensure we actually asserted
+          assert.isTrue(threw);
+        });
+      }
+
+      describe('for unknown events', function() {
+
+        beforeEach(function () {
+          this.event = 'test-event-unknown';
+          this.regex = new RegExp(
+            'unknown event.*\'' + this.event + '\''
+          , 'i'
+          );
+        });
+
+        invalidAssertions();
+
+      });
+
+      describe('for known events in non-accepting states', function() {
+
+        beforeEach(function () {
+          // The 'A' state does not accept 'invalid'
+          this.event = 'invalid';
+          this.regex = new RegExp(
+            [
+              'machine does not accept'
+            , '\'invalid\''
+            , 'in \'A\' state'
+            ].join('.*')
+          , 'i'
+          );
+        });
+
+        invalidAssertions();
 
       });
 
