@@ -294,6 +294,76 @@ describe('[unit] statem', function () {
 
     });
 
+    describe('invalid transitions', function() {
+
+      function invalidAssertions() {
+
+        // Common test cases for invalid transitions. Expects the test context
+        // to have an `event` attribute containing the string event and a
+        // `regex` attribute containing an error matcher.
+
+        it('throws', function () {
+          assert.throws(
+            function () {
+              this.machine.send(this.event);
+            }.bind(this)
+          , this.regex
+          );
+        });
+
+        it('does not change machine state', function () {
+          var threw = false;
+
+          this.machine._state = 'ready';
+
+          try {
+            this.machine.send(this.unknown);
+          }
+          catch (e) {
+            assert.equal(this.machine.state(), 'ready');
+            threw = true;
+          }
+
+          // safeguard to ensure we actually asserted
+          assert.isTrue(threw);
+        });
+      }
+
+      describe('for unknown events', function() {
+
+        beforeEach(function () {
+          this.event = 'test-event-unknown';
+          this.regex = new RegExp(
+            'unknown event.*\'' + this.unknown + '\''
+          , 'i'
+          );
+        });
+
+        invalidAssertions();
+
+      });
+
+      describe('for known events in non-accepting states', function() {
+
+        beforeEach(function () {
+          // The 'ready' state does not accept 'done'
+          this.event = 'done';
+          this.regex = new RegExp(
+            [
+              'machine does not accept'
+            , '\'done\''
+            , 'in \'ready\' state'
+            ].join('.*')
+          , 'i'
+          );
+        });
+
+        invalidAssertions();
+
+      });
+
+    });
+
   });
 
 });
