@@ -317,7 +317,7 @@ describe('[unit] statem', function () {
           this.machine._state = 'ready';
 
           try {
-            this.machine.send(this.unknown);
+            this.machine.send(this.event);
           }
           catch (e) {
             assert.equal(this.machine.state(), 'ready');
