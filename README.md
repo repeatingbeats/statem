@@ -127,11 +127,14 @@ Gets current machine state.
 
     @returns {string} Current state
 
-#### Machine.prototype.send(eventName)
+#### Machine.prototype.send(event)
 
 Signals event to machine.
 
     @param {string} event Event name
+
+    @throws {Error} if event is unknown
+    @throws {Error} if current state does not accept event
 
 #### Machine.prototype.onEnter(state, observer)
 
